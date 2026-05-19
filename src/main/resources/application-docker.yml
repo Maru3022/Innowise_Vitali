@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:online_store_users}
+    url: jdbc:postgresql://${DB_HOST:postgres-users}:${DB_PORT:5432}/${DB_NAME:online_store_users}
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -24,9 +24,9 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
+      password: ${REDIS_PASSWORD:redis_pass}
 
 server:
   port: ${SERVER_PORT:8082}
@@ -34,7 +34,7 @@ server:
 grpc:
   client:
     auth-service:
-      address: 'static://${GRPC_AUTH_HOST:127.0.0.1}:${GRPC_AUTH_PORT:9090}'
+      address: 'static://${GRPC_AUTH_HOST:auth-service}:${GRPC_AUTH_PORT:9090}'
       negotiationType: plaintext
       enable-keep-alive: true
       keep-alive-time: 30s
