@@ -16,7 +16,7 @@ USER appuser
 
 COPY --from=builder /app/target/*.jar app.jar
 
-EXPOSE 8081 9090
+EXPOSE 8082
 
 ENTRYPOINT ["java", \
   "-XX:+UseContainerSupport", \
