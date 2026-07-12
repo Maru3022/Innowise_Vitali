@@ -2,37 +2,21 @@ package com.example.innowise_vitali.mapper;
 
 import com.example.innowise_vitali.dto.UserRequestDto;
 import com.example.innowise_vitali.dto.UserResponseDto;
-import com.example.innowise_vitali.entity.Role;
 import com.example.innowise_vitali.entity.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-    public User toEntity(
-            UserRequestDto dto,
-            String encodedPassword) {
-        return User.builder()
-                .username(dto.getUsername())
-                .email(dto.getEmail())
-                .passwordHash(encodedPassword)
-                .role(dto.getRole() != null ? dto.getRole() : Role.USER)
-                .isActive(true)
-                .build();
-    }
+    @Mapping(target = "passwordHash", source = "encodedPassword")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "paymentCards", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "isActive", ignore = true)
+    User toEntity(UserRequestDto dto, String encodedPassword);
 
-    public UserResponseDto toResponseDto(
-            User user
-    ) {
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .isActive(user.getIsActive())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build();
-    }
-
+    UserResponseDto toResponseDto(User user);
 }
