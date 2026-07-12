@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -86,6 +87,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<UserResponseDto> findByUsername(String username) {
+        log.debug("Fetching user by username='{}'", username);
+        return userRepository.findByUsername(username)
+                .map(userMapper::toResponseDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<UserResponseDto> getAllUsers(String name, String surname, Pageable pageable) {
         log.debug("Listing users: name='{}' surname='{}' page={} size={}", name, surname, pageable.getPageNumber(), pageable.getPageSize());
         Specification<User> spec = Specification
@@ -102,13 +111,13 @@ public class UserServiceImpl implements UserService {
         log.info("Updating user id={}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Update failed — user not found: id={}", id);
+                    log.warn("Update failed Р Р†Р вЂљРІР‚Сњ user not found: id={}", id);
                     return new UserNotFoundException(id);
                 });
 
         String oldEmail = user.getEmail();
         if (!oldEmail.equalsIgnoreCase(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
-            log.warn("Update failed — email '{}' is already taken", request.getEmail());
+            log.warn("Update failed Р Р†Р вЂљРІР‚Сњ email '{}' is already taken", request.getEmail());
             throw new UserAlreadyExistsException("email", request.getEmail());
         }
 
@@ -131,7 +140,7 @@ public class UserServiceImpl implements UserService {
         log.info("Deactivating user id={}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Deactivate failed — user not found: id={}", id);
+                    log.warn("Deactivate failed Р Р†Р вЂљРІР‚Сњ user not found: id={}", id);
                     return new UserNotFoundException(id);
                 });
         user.setIsActive(false);
@@ -146,7 +155,7 @@ public class UserServiceImpl implements UserService {
         log.info("Activating user id={}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Activate failed — user not found: id={}", id);
+                    log.warn("Activate failed Р Р†Р вЂљРІР‚Сњ user not found: id={}", id);
                     return new UserNotFoundException(id);
                 });
         user.setIsActive(true);
@@ -161,14 +170,14 @@ public class UserServiceImpl implements UserService {
         log.info("Adding card for user id={}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    log.warn("Add card failed — user not found: id={}", userId);
+                    log.warn("Add card failed Р Р†Р вЂљРІР‚Сњ user not found: id={}", userId);
                     return new UserNotFoundException(userId);
                 });
 
         long activeCount = cardRepository.countByUserIdAndIsActiveTrue(userId);
         log.debug("User id={} has {} active cards", userId, activeCount);
         if (activeCount >= 5) {
-            log.warn("Add card failed — user id={} already has 5 active cards", userId);
+            log.warn("Add card failed Р Р†Р вЂљРІР‚Сњ user id={} already has 5 active cards", userId);
             throw new IllegalStateException("User cannot have more than 5 active payment cards");
         }
 
@@ -185,7 +194,7 @@ public class UserServiceImpl implements UserService {
     public List<PaymentCardResponseDto> getUserCards(Long userId) {
         log.debug("Fetching cards for user id={}", userId);
         if (!userRepository.existsById(userId)) {
-            log.warn("Get cards failed — user not found: id={}", userId);
+            log.warn("Get cards failed Р Р†Р вЂљРІР‚Сњ user not found: id={}", userId);
             throw new UserNotFoundException(userId);
         }
         List<PaymentCardResponseDto> cards = cardRepository.findByUserId(userId).stream()
@@ -201,7 +210,7 @@ public class UserServiceImpl implements UserService {
         log.info("Deactivating card id={}", cardId);
         PaymentCard card = cardRepository.findById(cardId)
                 .orElseThrow(() -> {
-                    log.warn("Deactivate card failed — card not found: id={}", cardId);
+                    log.warn("Deactivate card failed Р Р†Р вЂљРІР‚Сњ card not found: id={}", cardId);
                     return new PaymentCardNotFoundException(cardId);
                 });
         card.setIsActive(false);
@@ -215,7 +224,7 @@ public class UserServiceImpl implements UserService {
         log.info("Activating card id={}", cardId);
         PaymentCard card = cardRepository.findById(cardId)
                 .orElseThrow(() -> {
-                    log.warn("Activate card failed — card not found: id={}", cardId);
+                    log.warn("Activate card failed Р Р†Р вЂљРІР‚Сњ card not found: id={}", cardId);
                     return new PaymentCardNotFoundException(cardId);
                 });
         card.setIsActive(true);

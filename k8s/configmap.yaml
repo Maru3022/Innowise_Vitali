@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: online-store
+data:
+  SPRING_PROFILES_ACTIVE: "docker"
+  DB_HOST: "postgres-users"
+  DB_PORT: "5432"
+  DB_NAME: "online_store_users"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  GRPC_AUTH_HOST: "auth-service"
+  GRPC_AUTH_PORT: "9090"

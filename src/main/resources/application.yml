@@ -30,6 +30,8 @@ spring:
 
 server:
   port: ${SERVER_PORT:8082}
+gateway:
+  internal-secret: ${INTERNAL_SECRET:dev-internal-secret}
 
 grpc:
   client:

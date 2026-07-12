@@ -1,6 +1,6 @@
 package com.example.innowise_vitali;
 
-import com.example.innowise_vitali.grpc.AuthGrpcServiceGrpc;
+import com.example.innowise_vitali.auth.grpc.AuthGrpcServiceGrpc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

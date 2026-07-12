@@ -4,7 +4,7 @@ import com.example.innowise_vitali.dto.PaymentCardRequestDto;
 import com.example.innowise_vitali.dto.UserRequestDto;
 import com.example.innowise_vitali.entity.Role;
 import com.example.innowise_vitali.entity.User;
-import com.example.innowise_vitali.grpc.AuthGrpcServiceGrpc;
+import com.example.innowise_vitali.auth.grpc.AuthGrpcServiceGrpc;
 import com.example.innowise_vitali.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

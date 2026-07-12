@@ -22,6 +22,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: ${LIQUIBASE_ENABLED:true}
 
+  cache:
+    type: redis
   data:
     redis:
       host: ${REDIS_HOST:redis}

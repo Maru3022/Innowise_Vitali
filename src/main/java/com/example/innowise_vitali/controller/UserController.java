@@ -28,8 +28,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
+    @GetMapping("/internal/by-username/{username}")
+    public ResponseEntity<UserResponseDto> getUserByUsernameInternal(@PathVariable String username) {
+        return userService.findByUsername(username)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.getUserById(#id).username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('INTERNAL') or @userServiceImpl.getUserById(#id).username == authentication.name")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
@@ -50,13 +57,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.getUserById(#id).username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('INTERNAL') or @userServiceImpl.getUserById(#id).username == authentication.name")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto request) {
         return ResponseEntity.ok(userService.updateUser(id, request));
     }
 
     @PatchMapping("/{id}/deactivate")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.getUserById(#id).username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('INTERNAL') or @userServiceImpl.getUserById(#id).username == authentication.name")
     public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
         userService.deactivateUser(id);
         return ResponseEntity.noContent().build();
@@ -70,13 +77,13 @@ public class UserController {
     }
 
     @PostMapping("/{id}/cards")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.getUserById(#id).username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('INTERNAL') or @userServiceImpl.getUserById(#id).username == authentication.name")
     public ResponseEntity<PaymentCardResponseDto> addCard(@PathVariable Long id, @Valid @RequestBody PaymentCardRequestDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.addCardToUser(id, request));
     }
 
     @GetMapping("/{id}/cards")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.getUserById(#id).username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('INTERNAL') or @userServiceImpl.getUserById(#id).username == authentication.name")
     public ResponseEntity<List<PaymentCardResponseDto>> getCards(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserCards(id));
     }
